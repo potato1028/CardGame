@@ -24,9 +24,11 @@ public class RedPlayer : MonoBehaviour {
     public string currentCardTag;
 
     private int DoubleCount;
+    private bool isRelative;
 
     void Start() {
         confirm = MovePointNode.GetComponent<PointButton>();
+        Goal = GameObject.Find("Goal");
 
         DoubleCount = 0;
     }
@@ -252,6 +254,7 @@ public class RedPlayer : MonoBehaviour {
                     SideTel();
 
                     DoubleCount = 0;
+                    isRelative = false;
                     break;
             }
         }
@@ -413,12 +416,27 @@ public class RedPlayer : MonoBehaviour {
     // }
 
     private void SideTel() {
+        isRelative = true;
+        for(int i = -2; i < 3; i++) {
+            if(i == -2 || i == 2) {
+                for(int k = -2; k < 3; k++) {
+                    CreatePoint(MovePointNode, MovePointPrefab, Goal.transform.position.x + i, Goal.transform.position.y + k);
+                }
+            }
+            else {
+                CreatePoint(MovePointNode, MovePointPrefab, Goal.transform.position.x + i, Goal.transform.position.y + 2f);
+                CreatePoint(MovePointNode, MovePointPrefab, Goal.transform.position.x + i, Goal.transform.position.y + -2f);
+            }
+        }
 
+        confirm.CreateButton();
     }
 
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {
-        X += transform.position.x;
-        Y += transform.position.y;
+        if(!isRelative) {
+            X += transform.position.x;
+            Y += transform.position.y;
+        }
 
         if((X >= -7 && X <= 7) && (Y >= -7 && Y <= 7)) {
             GameObject PointCard = Instantiate(CardPrefab, new Vector3(X, Y, 0), Quaternion.identity);
