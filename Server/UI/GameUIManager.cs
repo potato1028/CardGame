@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
@@ -9,22 +10,8 @@ namespace Com.XxX {
     public class GameUIManager : MonoBehaviourPunCallbacks {
         #region Photon Callbacks
 
-        public override void OnPlayerEnteredRoom(Player other) {
-            Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName);
-            if(PhotonNetwork.IsMasterClient) {
-                Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
-
-                LoadArena();
-            }
-        }
-
-        public override void OnPlayerLeftRoom(Player other) {
-            Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName);
-            if(PhotonNetwork.IsMasterClient) {
-                Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
-
-                LoadArena();
-            }
+        public override void OnLeftRoom() {
+            SceneManager.LoadScene(0);
         }
 
         #endregion
@@ -47,7 +34,29 @@ namespace Com.XxX {
             Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
             PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
         }
+        
+        #endregion
 
+        #region Photon Callbacks
+
+        public override void OnPlayerEnteredRoom(Player other) {
+            Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName);
+            if(PhotonNetwork.IsMasterClient) {
+                Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
+
+                LoadArena();
+            }
+        }
+
+        public override void OnPlayerLeftRoom(Player other) {
+            Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName);
+            if(PhotonNetwork.IsMasterClient) {
+                Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
+
+                LoadArena();
+            }
+        }
+        
         #endregion
     }
 }

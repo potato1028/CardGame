@@ -18,7 +18,7 @@ namespace Com.XxX {
 
         string gameVersion = "0";
 
-       
+        bool isConnecting;
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace Com.XxX {
         #region Public Methods
 
         public void Connect() {
-            
+            isConnecting = true;
 
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
@@ -60,9 +60,9 @@ namespace Com.XxX {
 
         public override void OnConnectedToMaster() {
             Debug.Log("PUN Basics Tutorial/Manager : OnConnectedToMaster() was called by  PUN");
-            
-            PhotonNetwork.JoinRandomRoom();
-            
+            if(isConnecting) {
+                PhotonNetwork.JoinRandomRoom();
+            }
         }
 
         public override void OnDisconnected(DisconnectCause cause) {
@@ -80,6 +80,12 @@ namespace Com.XxX {
 
         public override void OnJoinedRoom() {
             Debug.Log("PUN Basics Tutorial/Manager : OnJoinedRoom() called by PUN. Now this client is in a room.");
+
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1) {
+                Debug.Log("We load the 'Room for 1' ");
+
+                PhotonNetwork.LoadLevel("Room for 1");
+            }
         }
 
         #endregion
