@@ -17,6 +17,7 @@ public class RedPlayer : MonoBehaviour {
     public GameObject CheckedCardNode;
     public GameObject MovePointNode;
     public GameObject ObstacleLocationNode;
+    public GameObject ObstacleNode;
 
     public GameObject MovePointPrefab;
     public GameObject ObstacleLocationPrefab;
@@ -46,6 +47,9 @@ public class RedPlayer : MonoBehaviour {
                     if(transform.position.y >= 7) {
                         Debug.Log("Course Block!!");
                     }
+                    else if(ObstacleNode.transform.childCount > 0) {
+                        ObstacleMove("UP", transform.position);
+                    }
                     else {
                         transform.position += new Vector3(0, 1, 0);
                     }
@@ -62,6 +66,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(transform.position.y <= -7) {
                         Debug.Log("Course Block!!");
+                    }
+                    else if(ObstacleNode.transform.childCount > 0) {
+                        ObstacleMove("DOWN", transform.position);
                     }
                     else {
                         transform.position += new Vector3(0, -1, 0);
@@ -80,6 +87,9 @@ public class RedPlayer : MonoBehaviour {
                     if(transform.position.x <= -7) {
                         Debug.Log("Course Block!!");
                     }
+                    else if(ObstacleNode.transform.childCount > 0) {
+                        ObstacleMove("LEFT", transform.position);
+                    }
                     else {
                         transform.position += new Vector3(-1, 0, 0);
                     }
@@ -96,6 +106,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(transform.position.x >= 7) {
                         Debug.Log("Course Block!!");
+                    }
+                    else if(ObstacleNode.transform.childCount > 0) {
+                        ObstacleMove("RIGHT", transform.position);
                     }
                     else {
                         transform.position += new Vector3(1, 0, 0);
@@ -430,6 +443,62 @@ public class RedPlayer : MonoBehaviour {
         }
 
         confirm.CreateButton();
+    }
+
+    private void ObstacleMove(string dir, Vector3 position) {
+        switch(dir) {
+            case "UP" :
+                position.y += 1;
+                for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                    if(position == ObstacleNode.transform.GetChild(i).position) {
+                        Debug.Log("Course Block!!");
+                    }
+                    else {
+                        transform.position += new Vector3(0, 1, 0); 
+                    }
+                }
+                position.y -= 1;
+                break;
+
+            case "DOWN" :
+                position.y -= 1;
+                for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                    if(position == ObstacleNode.transform.GetChild(i).position) {
+                        Debug.Log("Course Block!!");
+                    }
+                    else {
+                        transform.position += new Vector3(0, -1, 0); 
+                    }
+                }
+                position.y += 1;
+                break;
+
+            case "LEFT" :
+                position.x -= 1;
+                for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                    if(position == ObstacleNode.transform.GetChild(i).position) {
+                        Debug.Log("Course Block!!");
+                    }
+                    else {
+                        transform.position += new Vector3(-1, 0, 0); 
+                    }
+                }
+                position.x += 1;
+                break;
+
+            case "RIGHT" :
+                position.x += 1;
+                for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                    if(position == ObstacleNode.transform.GetChild(i).position) {
+                        Debug.Log("Course Block!!");
+                    }
+                    else {
+                        transform.position += new Vector3(1, 0, 0); 
+                    }
+                }
+                position.x -= 1;
+                break;
+        }
     }
 
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {

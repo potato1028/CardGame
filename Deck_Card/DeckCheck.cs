@@ -104,6 +104,7 @@ public class DeckCheck : MonoBehaviour {
 
     private void OnMouseDown() {
         int RandomNumber = Random.Range(0, LenCard);
+        
         float RandomX = Random.Range(-1f, 2f);
         float RandomY = Random.Range(-1f, 2f);
 
