@@ -36,10 +36,16 @@ public class DeckCheck : MonoBehaviour {
     public GameObject ObstaclePrefab;
     public GameObject ScoreUpPrefab;
     public GameObject SideTelPrefab;
+
+    public GameObject TelEnemyPrefab;
+    public GameObject ChangeLocationPrefab;
+    public GameObject InvertionPrefab;
+    public GameObject RandomLocationPrefab;
+    public GameObject GhostPlayerPrefab;
     
     private int CardOrder;
     private bool isDelay;
-    private const int LenCard = 20;
+    private const int LenCard = 25;
 
     public int BoutCard = 0;
 
@@ -78,6 +84,13 @@ public class DeckCheck : MonoBehaviour {
         NormalCard[17] = ObstaclePrefab;
         NormalCard[18] = ScoreUpPrefab;
         NormalCard[19] = SideTelPrefab;
+
+        NormalCard[20] = TelEnemyPrefab;
+        NormalCard[21] = ChangeLocationPrefab;
+        NormalCard[22] = InvertionPrefab;
+        NormalCard[23] = RandomLocationPrefab;
+        NormalCard[24] = GhostPlayerPrefab;
+
 
         CardOrder = 0;
         isDelay = false;

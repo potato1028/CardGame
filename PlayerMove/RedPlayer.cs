@@ -6,6 +6,7 @@ public class RedPlayer : MonoBehaviour {
     PointButton confirm;
 
     public GameObject Goal;
+    public GameObject Enemy;
 
     public GameObject Mid;
     public GameObject Edge;
@@ -30,6 +31,7 @@ public class RedPlayer : MonoBehaviour {
     void Start() {
         confirm = MovePointNode.GetComponent<PointButton>();
         Goal = GameObject.Find("Goal");
+        Enemy = GameObject.Find("Green");
 
         DoubleCount = 0;
     }
@@ -269,6 +271,31 @@ public class RedPlayer : MonoBehaviour {
                     DoubleCount = 0;
                     isRelative = false;
                     break;
+
+                case "ChangeLocation":
+                    Debug.Log("ChangeLocation");
+                    ChangeLocation();
+                    break;
+
+                case "GhostPlayer":
+
+                    Debug.Log("GhostPlayer");
+                    break;
+
+                case "Invertion":
+
+                    Debug.Log("Invertion");
+                    break;
+
+                case "RandomLocation":
+
+                    Debug.Log("RandomLocation");
+                    break;
+
+                case "TelEnemy":
+                
+                    Debug.Log("TelEnemy");
+                    break;
             }
         }
     }
@@ -499,6 +526,12 @@ public class RedPlayer : MonoBehaviour {
                 position.x -= 1;
                 break;
         }
+    }
+
+    private void ChangeLocation() {
+        Vector3 replace = transform.position;
+        transform.position = Enemy.transform.position;
+        Enemy.transform.position = replace;
     }
 
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {
