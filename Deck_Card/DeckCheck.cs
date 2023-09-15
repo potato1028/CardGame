@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class DeckCheck : MonoBehaviour {
+public class DeckCheck : MonoBehaviourPun {
     SpriteRenderer spriteRenderer;
     BoxCollider2D box2D;
 
@@ -97,6 +99,9 @@ public class DeckCheck : MonoBehaviour {
     }
 
     void Update() {
+        if(photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
         if(MovePointNode.transform.childCount > 0 || ObstacleLocationNode.transform.childCount > 0) {
             box2D.enabled = false;
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
