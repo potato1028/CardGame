@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class RedPlayer : MonoBehaviour {
     PointButton confirm;
@@ -283,17 +284,17 @@ public class RedPlayer : MonoBehaviour {
                     break;
 
                 case "Invertion":
-
+                    Invertion();
                     Debug.Log("Invertion");
                     break;
 
                 case "RandomLocation":
-
+                    RandomPosition(gameObject);
                     Debug.Log("RandomLocation");
                     break;
 
-                case "TelEnemy":
-                
+                case "TelEnemyRandom":
+                    RandomPosition(Enemy);
                     Debug.Log("TelEnemy");
                     break;
             }
@@ -434,11 +435,12 @@ public class RedPlayer : MonoBehaviour {
     private void Obstacle() {
         Vector3 playerLocation = gameObject.transform.position;
         Vector3 goalLocation = Goal.transform.position;
+        Vector3 enemyLocation = Enemy.transform.position;
 
         for(int i = -7; i < 8; i++) {
             for(int k = -7; k < 8; k++) {
 
-                if((i == playerLocation.x && k == playerLocation.y) || (i == goalLocation.x && k == goalLocation.y)) {
+                if((i == playerLocation.x && k == playerLocation.y) || (i == goalLocation.x && k == goalLocation.y) || (i == enemyLocation.x && k == enemyLocation.y)) {
                     continue;
                 }
                 else {
@@ -448,7 +450,6 @@ public class RedPlayer : MonoBehaviour {
 
             }
         }
-
     }
 
     // private void ScoreUp() {
@@ -532,6 +533,54 @@ public class RedPlayer : MonoBehaviour {
         Vector3 replace = transform.position;
         transform.position = Enemy.transform.position;
         Enemy.transform.position = replace;
+    }
+
+    private void RandomPosition(GameObject who) {
+        System.Random random = new System.Random();
+        Vector3 RandomLocation = Vector3.zero;
+
+        while(true) {
+            int X = random.Next(-7, 8);
+            int Y = random.Next(-7, 8);
+            RandomLocation = new Vector3(X, Y, 0);
+
+            if(Enemy.transform.position != RandomLocation &&
+               Goal.transform.position != RandomLocation &&
+               this.transform.position != RandomLocation) {
+                bool obstacleOverlap = false;
+
+                for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                    if(ObstacleNode.transform.GetChild(i).transform.position == RandomLocation) {
+                        obstacleOverlap = true;
+                        break;
+                    }
+                }
+                if(!obstacleOverlap) {
+                    break;
+                }
+            }
+        }
+
+        who.transform.position = RandomLocation;
+    }
+
+    private void Invertion() {
+        float InvertionX;
+        if(ObstacleNode.transform.childCount > 0) {
+            for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+                InvertionX = ObstacleNode.transform.GetChild(i).transform.position.x;
+                ObstacleNode.transform.GetChild(i).transform.position = new Vector3(InvertionX *= -1, ObstacleNode.transform.GetChild(i).transform.position.y, 0);
+            }
+        }
+
+        InvertionX = Enemy.transform.position.x;
+        Enemy.transform.position = new Vector3(InvertionX *= -1, Enemy.transform.position.y, 0);
+        
+        InvertionX = this.transform.position.x;
+        this.transform.position = new Vector3(InvertionX *= -1, this.transform.position.y, 0);
+
+        InvertionX = Goal.transform.position.x;
+        Goal.transform.position = new Vector3(InvertionX *= -1, Goal.transform.position.y, 0);
     }
 
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {

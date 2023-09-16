@@ -39,7 +39,7 @@ public class DeckCheck : MonoBehaviourPun {
     public GameObject ScoreUpPrefab;
     public GameObject SideTelPrefab;
 
-    public GameObject TelEnemyPrefab;
+    public GameObject TelEnemyRandomPrefab;
     public GameObject ChangeLocationPrefab;
     public GameObject InvertionPrefab;
     public GameObject RandomLocationPrefab;
@@ -87,7 +87,7 @@ public class DeckCheck : MonoBehaviourPun {
         NormalCard[18] = ScoreUpPrefab;
         NormalCard[19] = SideTelPrefab;
 
-        NormalCard[20] = TelEnemyPrefab;
+        NormalCard[20] = TelEnemyRandomPrefab;
         NormalCard[21] = ChangeLocationPrefab;
         NormalCard[22] = InvertionPrefab;
         NormalCard[23] = RandomLocationPrefab;
