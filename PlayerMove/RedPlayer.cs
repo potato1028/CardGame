@@ -9,13 +9,6 @@ public class RedPlayer : MonoBehaviour {
     public GameObject Goal;
     public GameObject Enemy;
 
-    public GameObject Mid;
-    public GameObject Edge;
-    public GameObject UpLine;
-    public GameObject DownLine;
-    public GameObject LeftLine;
-    public GameObject RightLine;
-
     public GameObject CheckedCardNode;
     public GameObject MovePointNode;
     public GameObject ObstacleLocationNode;
@@ -30,10 +23,15 @@ public class RedPlayer : MonoBehaviour {
     private bool isRelative;
 
     void Start() {
-        confirm = MovePointNode.GetComponent<PointButton>();
         Goal = GameObject.Find("Goal");
         Enemy = GameObject.Find("Green");
+        CheckedCardNode = GameObject.Find("CheckedCard");
+        MovePointNode = GameObject.Find("MovePoint");
+        ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
+        ObstacleNode = GameObject.Find("Obstacles");
 
+        confirm = MovePointNode.GetComponent<PointButton>();
+        
         DoubleCount = 0;
     }
 
@@ -284,7 +282,7 @@ public class RedPlayer : MonoBehaviour {
                     break;
 
                 case "Invertion":
-                    Invertion();
+                    // Invertion();
                     Debug.Log("Invertion");
                     break;
 
@@ -564,24 +562,24 @@ public class RedPlayer : MonoBehaviour {
         who.transform.position = RandomLocation;
     }
 
-    private void Invertion() {
-        float InvertionX;
-        if(ObstacleNode.transform.childCount > 0) {
-            for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
-                InvertionX = ObstacleNode.transform.GetChild(i).transform.position.x;
-                ObstacleNode.transform.GetChild(i).transform.position = new Vector3(InvertionX *= -1, ObstacleNode.transform.GetChild(i).transform.position.y, 0);
-            }
-        }
+    // private void Invertion() {
+    //     float InvertionX;
+    //     if(ObstacleNode.transform.childCount > 0) {
+    //         for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
+    //             InvertionX = ObstacleNode.transform.GetChild(i).transform.position.x;
+    //             ObstacleNode.transform.GetChild(i).transform.position = new Vector3(InvertionX *= -1, ObstacleNode.transform.GetChild(i).transform.position.y, 0);
+    //         }
+    //     }
 
-        InvertionX = Enemy.transform.position.x;
-        Enemy.transform.position = new Vector3(InvertionX *= -1, Enemy.transform.position.y, 0);
+    //     InvertionX = Enemy.transform.position.x;
+    //     Enemy.transform.position = new Vector3(InvertionX *= -1, Enemy.transform.position.y, 0);
         
-        InvertionX = this.transform.position.x;
-        this.transform.position = new Vector3(InvertionX *= -1, this.transform.position.y, 0);
+    //     InvertionX = this.transform.position.x;
+    //     this.transform.position = new Vector3(InvertionX *= -1, this.transform.position.y, 0);
 
-        InvertionX = Goal.transform.position.x;
-        Goal.transform.position = new Vector3(InvertionX *= -1, Goal.transform.position.y, 0);
-    }
+    //     InvertionX = Goal.transform.position.x;
+    //     Goal.transform.position = new Vector3(InvertionX *= -1, Goal.transform.position.y, 0);
+    // }
 
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {
         if(!isRelative) {

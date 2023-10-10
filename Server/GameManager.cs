@@ -7,7 +7,30 @@ using Photon.Realtime;
 
 namespace Com.MyCompany.MyGame {
     public class GameManager : MonoBehaviourPunCallbacks {
+        
+        #region Public Variables
+
+        [Tooltip("The prefab to use for representing the player")]
+        public GameObject playerPrefab;
+
+        string currentSceneName;
+
+        #endregion
+
+
+
         #region Photon Callbacks
+
+        private void Start() {
+            if(playerPrefab == null) {
+                Debug.LogError("<Color = Red><a>Missing</a></Color>", this);
+            }
+            else {
+                currentSceneName = SceneManager.GetActiveScene().name;
+                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", currentSceneName);
+                PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            }
+        }
 
         public override void OnPlayerEnteredRoom(Player other) {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName);
@@ -56,6 +79,7 @@ namespace Com.MyCompany.MyGame {
             Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
             PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
         }
+        
         #endregion
     }
 }

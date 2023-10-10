@@ -93,6 +93,9 @@ public class DeckCheck : MonoBehaviourPun {
         NormalCard[23] = RandomLocationPrefab;
         NormalCard[24] = GhostPlayerPrefab;
 
+        CardNode = GameObject.Find("CheckedCard");
+        MovePointNode = GameObject.Find("MovePoint");
+        ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
 
         CardOrder = 0;
         isDelay = false;

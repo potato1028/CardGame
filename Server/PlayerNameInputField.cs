@@ -39,7 +39,7 @@ namespace Com.MyCompany.MyGame {
         #region Public Methods
 
         public void SetPlayerName(string value) {
-            if(!string.IsNullOrEmpty(value)) {
+            if(string.IsNullOrEmpty(value)) {
                 Debug.LogError("Player Name is Null or empty");
                 return;
             }

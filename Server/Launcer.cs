@@ -68,7 +68,7 @@ namespace Com.MyCompany.MyGame {
 
                 PhotonNetwork.LoadLevel("Room for 1");
             }
-            
+
             Debug.Log("PUN Basics Tutorial/Launcher : OnJoinedRoom() called by PUN. Now this client is in a room.");
         }
 
@@ -100,7 +100,5 @@ namespace Com.MyCompany.MyGame {
         }
 
         #endregion
-
-
     }
 }
