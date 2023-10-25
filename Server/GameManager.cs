@@ -11,35 +11,31 @@ namespace Com.MyCompany.MyGame {
         #region Public Variables
 
         [Tooltip("The prefab to use for representing the player")]
-        public GameObject playerPrefab;
+        public GameObject playerOnePrefab;
+        public GameObject playerTwoPrefab;
 
         string currentSceneName;
 
         #endregion
 
 
-
         #region Photon Callbacks
-
-        private void Start() {
-            if(playerPrefab == null) {
-                Debug.LogError("<Color = Red><a>Missing</a></Color>", this);
-            }
-            else {
-                currentSceneName = SceneManager.GetActiveScene().name;
-                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", currentSceneName);
-                PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            }
-        }
 
         public override void OnPlayerEnteredRoom(Player other) {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName);
 
             if(PhotonNetwork.IsMasterClient) {
                 Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}",PhotonNetwork.IsMasterClient);
-
-                LoadArena();
             }
+
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 2) {
+                PhotonNetwork.Instantiate(this.playerOnePrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(this.playerTwoPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            }
+            else {
+                Debug.Log("Player Not Enough");
+            }
+
         }
 
         public override void OnPlayerLeftRoom(Player other){
@@ -49,12 +45,15 @@ namespace Com.MyCompany.MyGame {
 
                 Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
 
-                LoadArena();
             }
+
+            DestroyPlayers();
         }
 
         public override void OnLeftRoom() {
             SceneManager.LoadScene(0);
+
+            DestroyPlayers();
         }
 
         #endregion
@@ -71,15 +70,27 @@ namespace Com.MyCompany.MyGame {
 
         #region Private Methods
         
-        void LoadArena() {
-            if(!PhotonNetwork.IsMasterClient) {
-                Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
-                return;
-            }
-            Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-            PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
-        }
+        // void LoadArena() {
+        //     if(!PhotonNetwork.IsMasterClient) {
+        //         Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
+        //         return;
+        //     }
+        //     Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
+        //     PhotonNetwork.LoadLevel("Room for " + 1);
+        // }
         
         #endregion
+
+
+        void DestroyPlayers() {
+            GameObject player_1 = GameObject.FindWithTag("RedPlayer");
+            GameObject player_2 = GameObject.FindWithTag("GreenPlayer");
+
+            Destroy(player_1);
+            Destroy(player_2);
+            
+        }
+
+
     }
 }
