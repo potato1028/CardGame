@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class RedPlayer : MonoBehaviour {
+public class GreenPlayer : MonoBehaviour {
     PointButton confirm;
 
     public GameObject Goal;
@@ -24,11 +24,11 @@ public class RedPlayer : MonoBehaviour {
 
     void Start() {
         Goal = GameObject.Find("Goal");
-        CheckedCardNode = GameObject.Find("CheckedCard_Red");
+        CheckedCardNode = GameObject.Find("CheckedCard_Green");
         MovePointNode = GameObject.Find("MovePoint");
         ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
         ObstacleNode = GameObject.Find("Obstacles");
-        Enemy = GameObject.Find("GreenPlayer");
+        Enemy = GameObject.Find("RedPlayer");
 
         confirm = MovePointNode.GetComponent<PointButton>();
         

@@ -4,16 +4,16 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class DeckCheck : MonoBehaviourPun {
+public class DeckCheck_Green : MonoBehaviourPun {
     SpriteRenderer spriteRenderer;
     BoxCollider2D box2D;
 
-    RedPlayer redPlayer;
+    GreenPlayer greenPlayer;
 
     public GameObject CardNode;
     public GameObject MovePointNode;
     public GameObject ObstacleLocationNode;
-    public GameObject Player_1;
+    public GameObject Player_2;
 
     public GameObject MoveUpPrefab;
     public GameObject MoveDownPrefab;
@@ -47,7 +47,7 @@ public class DeckCheck : MonoBehaviourPun {
     
     private int CardOrder;
     private bool isDelay;
-    private const int LenCard = 25;
+    private const int LenCard = 8;
 
     public int BoutCard = 0;
 
@@ -58,7 +58,7 @@ public class DeckCheck : MonoBehaviourPun {
     // private GameObject[] CrazyCard;
     
     void Start() {
-        redPlayer = Player_1.GetComponent<RedPlayer>();
+        greenPlayer = Player_2.GetComponent<GreenPlayer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         box2D = GetComponent<BoxCollider2D>();
 
@@ -73,29 +73,27 @@ public class DeckCheck : MonoBehaviourPun {
         NormalCard[6] = RuDiaPrefab;
         NormalCard[7] = RdDiaPrefab;
 
-        NormalCard[8] = UDLRPrefab;
-        NormalCard[9] = MEdgePrefab;
-        NormalCard[10] = DoublePrefab;
-        NormalCard[11] = KinghtPrefab;
-        NormalCard[12] = RookPrefab;
-        NormalCard[13] = BishopPrefab;
-        NormalCard[14] = QueenPrefab;
+        // NormalCard[8] = UDLRPrefab;
+        // NormalCard[9] = MEdgePrefab;
+        // NormalCard[10] = DoublePrefab;
+        // NormalCard[11] = KinghtPrefab;
+        // NormalCard[12] = RookPrefab;
+        // NormalCard[13] = BishopPrefab;
+        // NormalCard[14] = QueenPrefab;
 
-        NormalCard[15] = BindPrefab;
-        NormalCard[16] = EnemyCardCheckPrefab;
-        NormalCard[17] = ObstaclePrefab;
-        NormalCard[18] = ScoreUpPrefab;
-        NormalCard[19] = SideTelPrefab;
+        // NormalCard[15] = BindPrefab;
+        // NormalCard[16] = EnemyCardCheckPrefab;
+        // NormalCard[17] = ObstaclePrefab;
+        // NormalCard[18] = ScoreUpPrefab;
+        // NormalCard[19] = SideTelPrefab;
 
-        NormalCard[20] = TelEnemyRandomPrefab;
-        NormalCard[21] = ChangeLocationPrefab;
-        NormalCard[22] = InvertionPrefab;
-        NormalCard[23] = RandomLocationPrefab;
-        NormalCard[24] = GhostPlayerPrefab;
+        // NormalCard[20] = TelEnemyRandomPrefab;
+        // NormalCard[21] = ChangeLocationPrefab;
+        // NormalCard[22] = InvertionPrefab;
+        // NormalCard[23] = RandomLocationPrefab;
+        // NormalCard[24] = GhostPlayerPrefab;
 
-        CardNode = GameObject.Find("CheckedCard");
-        MovePointNode = GameObject.Find("MovePoint");
-        ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
+        StartCoroutine(DelayFindGameObject());
 
         CardOrder = 0;
         isDelay = false;
@@ -105,18 +103,23 @@ public class DeckCheck : MonoBehaviourPun {
         if(photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
-        if(MovePointNode.transform.childCount > 0 || ObstacleLocationNode.transform.childCount > 0) {
-            box2D.enabled = false;
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
+        if(MovePointNode == null) {
+            Debug.Log("Waiting...");
         }
-        else if((MovePointNode.transform.childCount < 1 && box2D.enabled != true && !isDelay) || (ObstacleLocationNode.transform.childCount < 1 && box2D.enabled != true && !isDelay)) {
-            box2D.enabled = true;
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+        else {
+            if(MovePointNode.transform.childCount > 0 || ObstacleLocationNode.transform.childCount > 0) {
+                box2D.enabled = false;
+                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
+            }
+            else if((MovePointNode.transform.childCount < 1 && box2D.enabled != true && !isDelay) || (ObstacleLocationNode.transform.childCount < 1 && box2D.enabled != true && !isDelay)) {
+                box2D.enabled = true;
+                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+            }
         }
     }
 
     private void CreateCard(GameObject CardPrefab, float X, float Y) {
-        GameObject newCard = Instantiate(CardPrefab, new Vector3(-17 + X, -2 + Y, 0), Quaternion.identity);
+        GameObject newCard = Instantiate(CardPrefab, new Vector3(17 + X, -2 + Y, 0), Quaternion.identity);
         newCard.transform.parent = CardNode.transform;
         SpriteRenderer order = newCard.GetComponent<SpriteRenderer>();
         order.sortingOrder = CardOrder;
@@ -136,7 +139,7 @@ public class DeckCheck : MonoBehaviourPun {
         isDelay = true;
         StartCoroutine(DisableCard());
 
-        redPlayer.ExecuteCard();
+        greenPlayer.ExecuteCard();
 
         BoutCard++;
     }
@@ -147,5 +150,13 @@ public class DeckCheck : MonoBehaviourPun {
         box2D.enabled = true;
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
         isDelay = false;
+    }
+
+    IEnumerator DelayFindGameObject() {
+        yield return new WaitForSeconds(0.5f);
+
+        CardNode = GameObject.Find("CheckedCard_Green");
+        MovePointNode = GameObject.Find("MovePoint");
+        ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
     }
 }

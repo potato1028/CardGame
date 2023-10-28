@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 
 namespace Com.MyCompany.MyGame {
     public class GameManager : MonoBehaviourPunCallbacks {
@@ -14,7 +16,11 @@ namespace Com.MyCompany.MyGame {
         public GameObject playerOnePrefab;
         public GameObject playerTwoPrefab;
 
+        public Text debugTextR;
+        public Text debugTextG;
+
         string currentSceneName;
+
 
         #endregion
 
@@ -83,14 +89,42 @@ namespace Com.MyCompany.MyGame {
 
 
         void DestroyPlayers() {
-            GameObject player_1 = GameObject.FindWithTag("RedPlayer");
-            GameObject player_2 = GameObject.FindWithTag("GreenPlayer");
+            GameObject player_1 = GameObject.FindWithTag("playerOne");
+            GameObject player_2 = GameObject.FindWithTag("playerTwo");
 
             Destroy(player_1);
             Destroy(player_2);
             
         }
 
+        void Update() {
+            if(Input.GetKeyDown(KeyCode.L)) {
+                GameObject redPlayer = GameObject.FindWithTag("playerOne");
+
+                PhotonView photonViewR = redPlayer.GetComponent<PhotonView>();
+                if(photonViewR != null) {
+                    string messageR = "PhotonView ID of RedPlayer : " + photonViewR.ViewID;
+                    Debug.Log(messageR);
+                    debugTextR.text = messageR;
+                }
+                else {
+                    Debug.Log("no");
+                }
+                
+                GameObject greenPlayer = GameObject.FindWithTag("playerTwo");
+
+                PhotonView photonViewG = greenPlayer.GetComponent<PhotonView>();
+                if(photonViewG != null) {
+                    string messageG = "PhotonView ID of GreenPlayer : " + photonViewG.ViewID;
+                    Debug.Log(messageG);
+                    debugTextG.text = messageG;
+                }
+                else {
+                    Debug.Log("no");
+                }
+                
+            }
+        }
 
     }
 }
