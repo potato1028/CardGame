@@ -76,15 +76,6 @@ namespace Com.MyCompany.MyGame {
 
         #region Private Methods
         
-        // void LoadArena() {
-        //     if(!PhotonNetwork.IsMasterClient) {
-        //         Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
-        //         return;
-        //     }
-        //     Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-        //     PhotonNetwork.LoadLevel("Room for " + 1);
-        // }
-        
         #endregion
 
 
@@ -95,35 +86,6 @@ namespace Com.MyCompany.MyGame {
             Destroy(player_1);
             Destroy(player_2);
             
-        }
-
-        void Update() {
-            if(Input.GetKeyDown(KeyCode.L)) {
-                GameObject redPlayer = GameObject.FindWithTag("playerOne");
-
-                PhotonView photonViewR = redPlayer.GetComponent<PhotonView>();
-                if(photonViewR != null) {
-                    string messageR = "PhotonView ID of RedPlayer : " + photonViewR.ViewID;
-                    Debug.Log(messageR);
-                    debugTextR.text = messageR;
-                }
-                else {
-                    Debug.Log("no");
-                }
-                
-                GameObject greenPlayer = GameObject.FindWithTag("playerTwo");
-
-                PhotonView photonViewG = greenPlayer.GetComponent<PhotonView>();
-                if(photonViewG != null) {
-                    string messageG = "PhotonView ID of GreenPlayer : " + photonViewG.ViewID;
-                    Debug.Log(messageG);
-                    debugTextG.text = messageG;
-                }
-                else {
-                    Debug.Log("no");
-                }
-                
-            }
         }
 
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class DeckCheck_Red : MonoBehaviourPun {
+public class DeckCheck_Red : MonoBehaviourPunCallbacks {
     SpriteRenderer spriteRenderer;
     BoxCollider2D box2D;
 
@@ -48,6 +48,7 @@ public class DeckCheck_Red : MonoBehaviourPun {
     private int CardOrder;
     private bool isDelay;
     private const int LenCard = 8;
+    private bool canInteract;
 
     public int BoutCard = 0;
 
@@ -97,12 +98,10 @@ public class DeckCheck_Red : MonoBehaviourPun {
 
         CardOrder = 0;
         isDelay = false;
+        canInteract = photonView.IsMine;
     }
 
     void Update() {
-        if(photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
-            return;
-        }
         if(MovePointNode == null) {
             Debug.Log("Waiting...");
         }
@@ -119,7 +118,7 @@ public class DeckCheck_Red : MonoBehaviourPun {
     }
 
     private void CreateCard(GameObject CardPrefab, float X, float Y) {
-        GameObject newCard = Instantiate(CardPrefab, new Vector3(-17 + X, -2 + Y, 0), Quaternion.identity);
+        GameObject newCard = PhotonNetwork.Instantiate(CardPrefab.name, new Vector3(-17 + X, -2 + Y, 0), Quaternion.identity);
         newCard.transform.parent = CardNode.transform;
         SpriteRenderer order = newCard.GetComponent<SpriteRenderer>();
         order.sortingOrder = CardOrder;
@@ -127,21 +126,23 @@ public class DeckCheck_Red : MonoBehaviourPun {
     }
 
     private void OnMouseDown() {
-        int RandomNumber = Random.Range(0, LenCard);
+        if(canInteract) {
+            int RandomNumber = Random.Range(0, LenCard);
         
-        float RandomX = Random.Range(-1f, 2f);
-        float RandomY = Random.Range(-1f, 2f);
+            float RandomX = Random.Range(-1f, 2f);
+            float RandomY = Random.Range(-1f, 2f);
 
-        CreateCard(NormalCard[RandomNumber], RandomX, RandomY);
+            CreateCard(NormalCard[RandomNumber], RandomX, RandomY);
 
-        box2D.enabled = false;
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
-        isDelay = true;
-        StartCoroutine(DisableCard());
+            box2D.enabled = false;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
+            isDelay = true;
+            StartCoroutine(DisableCard());
 
-        redPlayer.ExecuteCard();
+            redPlayer.ExecuteCard();
 
-        BoutCard++;
+            BoutCard++;
+        }
     }
 
     IEnumerator DisableCard() {
