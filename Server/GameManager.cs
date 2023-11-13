@@ -19,6 +19,8 @@ namespace Com.MyCompany.MyGame {
         public Text debugTextR;
         public Text debugTextG;
 
+        public GameObject DeckCheckManagerPrefab;
+
         string currentSceneName;
 
 
@@ -37,6 +39,7 @@ namespace Com.MyCompany.MyGame {
             if(PhotonNetwork.CurrentRoom.PlayerCount == 2) {
                 PhotonNetwork.Instantiate(this.playerOnePrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                 PhotonNetwork.Instantiate(this.playerTwoPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(this.DeckCheckManagerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
             }
             else {
                 Debug.Log("Player Not Enough");
@@ -80,8 +83,8 @@ namespace Com.MyCompany.MyGame {
 
 
         void DestroyPlayers() {
-            GameObject player_1 = GameObject.FindWithTag("playerOne");
-            GameObject player_2 = GameObject.FindWithTag("playerTwo");
+            GameObject player_1 = GameObject.FindWithTag("RedDeck");
+            GameObject player_2 = GameObject.FindWithTag("GreenDeck");
 
             Destroy(player_1);
             Destroy(player_2);

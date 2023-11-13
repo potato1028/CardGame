@@ -5,6 +5,7 @@ using System;
 
 public class RedPlayer : MonoBehaviour {
     PointButton confirm;
+    DeckCheckManager deckCheck;
 
     public GameObject Goal;
     public GameObject Enemy;
@@ -13,6 +14,7 @@ public class RedPlayer : MonoBehaviour {
     public GameObject MovePointNode;
     public GameObject ObstacleLocationNode;
     public GameObject ObstacleNode;
+    public GameObject DeckCheckManagerNode;
 
     public GameObject MovePointPrefab;
     public GameObject ObstacleLocationPrefab;
@@ -35,13 +37,12 @@ public class RedPlayer : MonoBehaviour {
         DoubleCount = 0;
     }
 
-    public void ExecuteCard() {
-        if(CheckedCardNode.transform.childCount > 1) {
+    public void ExecuteCard(string cardTag) {
+        if(CheckedCardNode.transform.childCount > 3) {
             Invoke("ExecuteCard", 0.01f);
         }
         else {
-            currentCardTag = CheckedCardNode.transform.GetChild(0).tag;
-            switch (currentCardTag) {
+            switch (cardTag) {
                 case "MoveUp":
                     Debug.Log("Up");
 
@@ -57,9 +58,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-
+                    DeckReload();
                     break;
 
                 case "MoveDown":
@@ -77,9 +78,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-
+                    DeckReload();
                     break;
 
                 case "MoveLeft":
@@ -97,9 +98,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-                    
+                    DeckReload();
                     break;
 
                 case "MoveRight":
@@ -117,9 +118,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-                    
+                    DeckReload();
                     break;
 
                 case "LuDia":
@@ -134,9 +135,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-                   
+                    DeckReload();
                     break;
 
                 case "LdDia":
@@ -151,9 +152,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-
+                    DeckReload();
                     break;
 
                 case "RuDia":
@@ -168,9 +169,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-                    
+                    DeckReload();
                     break;
 
                 case "RdDia":
@@ -185,9 +186,9 @@ public class RedPlayer : MonoBehaviour {
 
                     if(DoubleCount == 1) {
                         DoubleCount = 0;
-                        ExecuteCard();
+                        ExecuteCard(cardTag);
                     }
-                    
+                    DeckReload();
                     break;
 
                 case "MoveUDLR":
@@ -207,7 +208,7 @@ public class RedPlayer : MonoBehaviour {
                 case "MoveDouble":
                     Debug.Log("Double");
                     DoubleCount += 1;
-
+                    DeckReload();
                     break;
 
                 case "MoveBishop":
@@ -242,12 +243,14 @@ public class RedPlayer : MonoBehaviour {
                     Debug.Log("Bind");
 
                     DoubleCount = 0;
+                    DeckReload();
                     break;
 
                 case "EnemyCardCheck":
                     Debug.Log("EnemyCardCheck");
 
                     DoubleCount = 0;
+                    DeckReload();
                     break;
 
                 case "Obstacle":
@@ -261,6 +264,7 @@ public class RedPlayer : MonoBehaviour {
                     Debug.Log("ScoreUp");
 
                     DoubleCount = 0;
+                    DeckReload();
                     break;
 
                 case "SideTel":
@@ -274,26 +278,31 @@ public class RedPlayer : MonoBehaviour {
                 case "ChangeLocation":
                     Debug.Log("ChangeLocation");
                     ChangeLocation();
+                    DeckReload();
                     break;
 
                 case "GhostPlayer":
 
                     Debug.Log("GhostPlayer");
+                    DeckReload();
                     break;
 
                 case "Invertion":
                     // Invertion();
                     Debug.Log("Invertion");
+                    DeckReload();
                     break;
 
                 case "RandomLocation":
                     RandomPosition(gameObject);
                     Debug.Log("RandomLocation");
+                    DeckReload();
                     break;
 
                 case "TelEnemyRandom":
                     RandomPosition(Enemy);
                     Debug.Log("TelEnemy");
+                    DeckReload();
                     break;
             }
         }
@@ -305,7 +314,7 @@ public class RedPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 0f, -1f);
         CreatePoint(MovePointNode, MovePointPrefab, 1f, 0f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, 0f);
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void EdgePoint() {
@@ -314,7 +323,7 @@ public class RedPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 1f, -1f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, 1f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, -1f);
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void Bishop() {
@@ -322,7 +331,7 @@ public class RedPlayer : MonoBehaviour {
 
         BishopLine();
 
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void Knight() {
@@ -335,7 +344,7 @@ public class RedPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 1f, -2f);
         CreatePoint(MovePointNode, MovePointPrefab, 2f, 1f);
         CreatePoint(MovePointNode, MovePointPrefab, 2f, -1f);
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void Rook() {
@@ -343,7 +352,7 @@ public class RedPlayer : MonoBehaviour {
         
         RookLine();
 
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void Queen() {
@@ -352,7 +361,7 @@ public class RedPlayer : MonoBehaviour {
         BishopLine();
         RookLine();
 
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void BishopLine() {
@@ -468,7 +477,7 @@ public class RedPlayer : MonoBehaviour {
             }
         }
 
-        confirm.CreateButton();
+        confirm.CreateButton('R');
     }
 
     private void ObstacleMove(string dir, Vector3 position) {
@@ -592,5 +601,14 @@ public class RedPlayer : MonoBehaviour {
             Debug.Log("PointCard");
             PointCard.transform.parent = ParentNode.transform;
         }
+    }
+
+    private void DeckReload() {
+        if(DeckCheckManagerNode == null) {
+            DeckCheckManagerNode = GameObject.FindWithTag("DeckCheckManager");
+            deckCheck = DeckCheckManagerNode.GetComponent<DeckCheckManager>();
+        }
+        
+        deckCheck.DeckReload('R');
     }
 }

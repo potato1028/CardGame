@@ -5,6 +5,8 @@ using UnityEngine;
 public class PointConfirm : MonoBehaviour {
     PointButton pointButton;
 
+    public GameObject DeckCheckManagerNode;
+
     void Start() {
         pointButton = transform.parent.GetComponent<PointButton>();
     }
