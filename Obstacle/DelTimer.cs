@@ -3,33 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DelTimer : MonoBehaviour {
-    DeckCheck_Red deckR;
-    DeckCheck_Green deckG;
+    GameObject TurnCountNode;
 
-    public GameObject[] Deck = new GameObject[2];
+    TurnCount turnCount;
 
-    public int[] CardNumber = new int[2];
-    public int[] FirstNumber = new int[2];
+    int initCount;
 
     void Start() {
-        Deck[0] = GameObject.Find("MainDeck_Red");
-        Deck[1] = GameObject.Find("MainDeck_Green");
+        TurnCountNode = GameObject.FindWithTag("TurnCountNode");
 
-        deckR = Deck[0].GetComponent<DeckCheck_Red>();
-        deckG = Deck[1].GetComponent<DeckCheck_Green>();
+        turnCount = TurnCountNode.GetComponent<TurnCount>();
+        turnCount.delTimer = this.gameObject.GetComponent<DelTimer>();
 
-        FirstNumber[0] = deckR.BoutCard;
-        FirstNumber[1] = deckG.BoutCard;
-
-        FirstNumber[0] += 5;
-        FirstNumber[1] += 5;
+        initCount = turnCount.count;
+        initCount += 10;
     }
 
-    void Update() {
-        if(FirstNumber[0] == deckR.BoutCard) {
-            Destroy(gameObject);
-        }
-        if(FirstNumber[1] == deckG.BoutCard) {
+    public void CheckCount(int nowCount) {
+        if(initCount == nowCount) {
             Destroy(gameObject);
         }
     }

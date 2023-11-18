@@ -71,8 +71,8 @@ public class DeckCheckManager : MonoBehaviourPunCallbacks {
         redDeck = RD.GetComponent<DeckCheck_Red>();
         greenDeck = GD.GetComponent<DeckCheck_Green>();
 
-        CardNode_Red = GameObject.Find("CheckedCard_Red");
-        CardNode_Green = GameObject.Find("CheckedCard_Green");
+        CardNode_Red = GameObject.FindWithTag("DeckCheckRed");
+        CardNode_Green = GameObject.FindWithTag("DeckCheckGreen");
 
         MovePointNode = GameObject.Find("MovePoint");
         ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
@@ -108,55 +108,72 @@ public class DeckCheckManager : MonoBehaviourPunCallbacks {
         Cards[23] = RandomLocationPrefab;
         Cards[24] = GhostPlayerPrefab;
 
+        ContactPlayer();
     }
 
-    public void CreateCard(char Player) {
+    public void CreateCard(string Player) {
         int[] RandomNumber = new int[3];
-        int locate = -20;
+        int locate = -25;
         for(int i = 0; i < 3; i++) {
             RandomNumber[i] = Random.Range(0, LenCard);
         }
 
+        SqawnCards(Player, RandomNumber, locate);
+    }
+    
+    void SqawnCards(string Player, int[] RandomNumber, int locate) {
         switch(Player) {
-            case 'R' :
-                GameObject[] newRedCard = new GameObject[3];
-                for(int i = 0; i < 3; i++) {
-                    newRedCard[i] = PhotonNetwork.Instantiate(Cards[RandomNumber[i]].name, new Vector3(locate, -8, 0), Quaternion.identity);
-                    newRedCard[i].transform.parent = CardNode_Red.transform;
-                    locate += 20;
-                }
+            case "R" :
+                SqawnCardsHelper(RandomNumber, locate, CardNode_Red);
                 redDeck.box2D.enabled = false;
                 redDeck.spriteRenderer.color = new Color(redDeck.spriteRenderer.color.r, redDeck.spriteRenderer.color.g, redDeck.spriteRenderer.color.b, 0.5f);
-                redDeck.isDelay = true;
                 break;
-            case 'G' :
-                GameObject[] newGreenCard = new GameObject[3];
-                for(int i = 0; i < 3; i++) {
-                    newGreenCard[i] = PhotonNetwork.Instantiate(Cards[RandomNumber[i]].name, new Vector3(locate, -8, 0), Quaternion.identity);
-                    newGreenCard[i].transform.parent = CardNode_Green.transform;
-                    locate += 20;
-                }
+
+            case "G" :
+                SqawnCardsHelper(RandomNumber, locate, CardNode_Green);
                 greenDeck.box2D.enabled = false;
                 greenDeck.spriteRenderer.color = new Color(greenDeck.spriteRenderer.color.r, greenDeck.spriteRenderer.color.g, greenDeck.spriteRenderer.color.b, 0.5f);
-                greenDeck.isDelay = true;
                 break;
         }
     }
+
+    void SqawnCardsHelper(int[] RandomNumber, int locate, GameObject Parent) {
+        for(int i = 0; i < 3; i++) {
+            GameObject newCard = PhotonNetwork.Instantiate(Cards[RandomNumber[i]].name, new Vector3(locate, -20, 0), Quaternion.identity);
+            photonView.RPC("CardsParent", RpcTarget.All, newCard.GetPhotonView().ViewID, Parent.GetPhotonView().ViewID);
+            locate += 25;
+        }
+    }
+
+    [PunRPC]
+    void CardsParent(int newCard, int Parent) {
+        PhotonView newCardPhoton = PhotonView.Find(newCard);
+        PhotonView parentPhoton = PhotonView.Find(Parent);
+
+        if(newCardPhoton != null && parentPhoton != null) {
+            newCardPhoton.TransferOwnership(parentPhoton.Owner);
+            newCardPhoton.transform.SetParent(parentPhoton.transform);
+        }
+    }
     
-    public void DeckReload(char Player) {
+    [PunRPC]
+    public void DeckReload(string Player) {
         switch(Player) {
-            case 'R' :
-                redDeck.BoutCard++;
-                redDeck.box2D.enabled = true;
-                redDeck.spriteRenderer.color = new Color(redDeck.spriteRenderer.color.r, redDeck.spriteRenderer.color.g, redDeck.spriteRenderer.color.b, 1.0f);
-                redDeck.isDelay = false;
-                break;
-            case 'G' :
-                greenDeck.BoutCard++;
+            case "R" :
                 greenDeck.box2D.enabled = true;
                 greenDeck.spriteRenderer.color = new Color(greenDeck.spriteRenderer.color.r, greenDeck.spriteRenderer.color.g, greenDeck.spriteRenderer.color.b, 1.0f);
-                greenDeck.isDelay = false;
+                Debug.Log("ReLoad Green Deck");
+                break;
+            case "G" :
+                redDeck.box2D.enabled = true;
+                redDeck.spriteRenderer.color = new Color(redDeck.spriteRenderer.color.r, redDeck.spriteRenderer.color.g, redDeck.spriteRenderer.color.b, 1.0f);
+                Debug.Log("ReLoad Red Deck");
                 break;
         }
+    }
+
+    public void ContactPlayer() {
+        redPlayer.Enemy = GP;
+        greenPlayer.Enemy = RP;
     }
 }

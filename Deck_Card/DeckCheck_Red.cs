@@ -9,28 +9,24 @@ public class DeckCheck_Red : MonoBehaviourPunCallbacks {
     public BoxCollider2D box2D;
     public DeckCheckManager DeckManager;
 
-    GameObject CardNode_Red;
-    GameObject MovePointNode;
-    GameObject ObstacleLocationNode;
-    GameObject DeckCheckManager;
+    public GameObject CardNode_Red;
+    public GameObject MovePointNode;
+    public GameObject ObstacleLocationNode;
+    public GameObject DeckCheckManager;
     
-    public bool isDelay;
     public bool canInteract;
 
-    public int BoutCard = 0;
-    
     void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         box2D = GetComponent<BoxCollider2D>();
        
-        isDelay = false;
         canInteract = photonView.IsMine;
     }
 
     void Update() {
         if(DeckManager == null) {
             DeckCheckManager = GameObject.FindWithTag("DeckCheckManager");
-            DeckManager = DeckCheckManager.GetComponent<DeckCheckManager>();
+            DeckManager = DeckCheckManager.GetComponent<DeckCheckManager>();  //역참조로 바꾸기
         }
         else {
             return;
@@ -40,35 +36,17 @@ public class DeckCheck_Red : MonoBehaviourPunCallbacks {
             DelayFindGameObject();
             Debug.Log("Waiting...");
         }
-        else {
-            if(MovePointNode.transform.childCount > 0 || ObstacleLocationNode.transform.childCount > 0) {
-                box2D.enabled = false;
-                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
-            }
-            else if((MovePointNode.transform.childCount < 1 && box2D.enabled != true && !isDelay) || (ObstacleLocationNode.transform.childCount < 1 && box2D.enabled != true && !isDelay)) {
-                box2D.enabled = true;
-                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
-            }
-        }
     }
 
     private void OnMouseDown() {
         if(canInteract) {
-            DeckManager.CreateCard('R');
+            DeckManager.CreateCard("R");
         }
     }
 
-    // IEnumerator DisableCard() {
-    //     yield return new WaitForSeconds(0.5f);
-
-    //     box2D.enabled = true;
-    //     spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
-    //     isDelay = false;
-    // }
-
     void DelayFindGameObject() {
         CardNode_Red = GameObject.Find("CheckedCard_Red");
-        MovePointNode = GameObject.Find("MovePoint");
+        MovePointNode = GameObject.Find("MovePoint");        //역참조로 바꾸기
         ObstacleLocationNode = GameObject.Find("ObstacleLocationNode");
     }
 }

@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class GreenPlayer : MonoBehaviour {
+public class GreenPlayer : MonoBehaviourPunCallbacks {
     PointButton confirm;
     DeckCheckManager deckCheck;
 
@@ -192,17 +194,15 @@ public class GreenPlayer : MonoBehaviour {
                     break;
 
                 case "MoveUDLR":
+                    DoubleCount = 0;
                     Debug.Log("UDLR");
                     UDLRPoint();
-
-                    DoubleCount = 0;
                     break;
 
                 case "MoveEdge":
+                    DoubleCount = 0;
                     Debug.Log("Edge");
                     EdgePoint();
-
-                    DoubleCount = 0;
                     break;
 
                 case "MoveDouble":
@@ -212,94 +212,89 @@ public class GreenPlayer : MonoBehaviour {
                     break;
 
                 case "MoveBishop":
+                    DoubleCount = 0;
                     Debug.Log("Bishop");
                     Bishop();
-
-                    DoubleCount = 0;
                     break;
 
                 case "MoveKnight":
+                    DoubleCount = 0;
                     Debug.Log("Knight");
                     Knight();
-
-                    DoubleCount = 0;
                     break;
 
                 case "MoveQueen":
+                    DoubleCount = 0;
                     Debug.Log("Queen");
                     Queen();
-
-                    DoubleCount = 0;
                     break;
 
                 case "MoveRook":
+                    DoubleCount = 0;
                     Debug.Log("Rook");
                     Rook();
-
-                    DoubleCount = 0;
                     break;
 
                 case "Bind":
-                    Debug.Log("Bind");
-
                     DoubleCount = 0;
+                    Debug.Log("Bind");
                     DeckReload();
                     break;
 
                 case "EnemyCardCheck":
-                    Debug.Log("EnemyCardCheck");
-
                     DoubleCount = 0;
+                    Debug.Log("EnemyCardCheck");
                     DeckReload();
                     break;
 
                 case "Obstacle":
+                    DoubleCount = 0;
                     Debug.Log("Obstacle");
                     Obstacle();
-
-                    DoubleCount = 0;
+                    DeckReload();
                     break;
 
                 case "ScoreUp":
-                    Debug.Log("ScoreUp");
-
                     DoubleCount = 0;
+                    Debug.Log("ScoreUp");
                     DeckReload();
                     break;
 
                 case "SideTel":
+                    DoubleCount = 0;
                     Debug.Log("SideTel");
                     SideTel();
-
-                    DoubleCount = 0;
                     isRelative = false;
                     break;
 
                 case "ChangeLocation":
+                    DoubleCount = 0;
                     Debug.Log("ChangeLocation");
                     ChangeLocation();
                     DeckReload();
                     break;
 
                 case "GhostPlayer":
-
+                    DoubleCount = 0;
                     Debug.Log("GhostPlayer");
                     DeckReload();
                     break;
 
                 case "Invertion":
-                    // Invertion();
+                    DoubleCount = 0;
                     Debug.Log("Invertion");
                     DeckReload();
                     break;
 
                 case "RandomLocation":
+                    DoubleCount = 0;
                     RandomPosition(gameObject);
                     Debug.Log("RandomLocation");
                     DeckReload();
                     break;
 
                 case "TelEnemyRandom":
+                    DoubleCount = 0;
                     RandomPosition(Enemy);
                     Debug.Log("TelEnemy");
                     DeckReload();
@@ -314,7 +309,7 @@ public class GreenPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 0f, -1f);
         CreatePoint(MovePointNode, MovePointPrefab, 1f, 0f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, 0f);
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void EdgePoint() {
@@ -323,7 +318,7 @@ public class GreenPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 1f, -1f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, 1f);
         CreatePoint(MovePointNode, MovePointPrefab, -1f, -1f);
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void Bishop() {
@@ -331,7 +326,7 @@ public class GreenPlayer : MonoBehaviour {
 
         BishopLine();
 
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void Knight() {
@@ -344,7 +339,7 @@ public class GreenPlayer : MonoBehaviour {
         CreatePoint(MovePointNode, MovePointPrefab, 1f, -2f);
         CreatePoint(MovePointNode, MovePointPrefab, 2f, 1f);
         CreatePoint(MovePointNode, MovePointPrefab, 2f, -1f);
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void Rook() {
@@ -352,7 +347,7 @@ public class GreenPlayer : MonoBehaviour {
         
         RookLine();
 
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void Queen() {
@@ -361,7 +356,7 @@ public class GreenPlayer : MonoBehaviour {
         BishopLine();
         RookLine();
 
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void BishopLine() {
@@ -431,14 +426,6 @@ public class GreenPlayer : MonoBehaviour {
         }
     }
 
-    // private void Bind() {
-
-    // }
-
-    // private void EnemyCardCheck() {
-
-    // }
-
     private void Obstacle() {
         Vector3 playerLocation = gameObject.transform.position;
         Vector3 goalLocation = Goal.transform.position;
@@ -459,10 +446,6 @@ public class GreenPlayer : MonoBehaviour {
         }
     }
 
-    // private void ScoreUp() {
-
-    // }
-
     private void SideTel() {
         isRelative = true;
         for(int i = -2; i < 3; i++) {
@@ -477,7 +460,7 @@ public class GreenPlayer : MonoBehaviour {
             }
         }
 
-        confirm.CreateButton('G');
+        confirm.CreateButton("G");
     }
 
     private void ObstacleMove(string dir, Vector3 position) {
@@ -571,25 +554,6 @@ public class GreenPlayer : MonoBehaviour {
         who.transform.position = RandomLocation;
     }
 
-    // private void Invertion() {
-    //     float InvertionX;
-    //     if(ObstacleNode.transform.childCount > 0) {
-    //         for(int i = 0; i < ObstacleNode.transform.childCount; i++) {
-    //             InvertionX = ObstacleNode.transform.GetChild(i).transform.position.x;
-    //             ObstacleNode.transform.GetChild(i).transform.position = new Vector3(InvertionX *= -1, ObstacleNode.transform.GetChild(i).transform.position.y, 0);
-    //         }
-    //     }
-
-    //     InvertionX = Enemy.transform.position.x;
-    //     Enemy.transform.position = new Vector3(InvertionX *= -1, Enemy.transform.position.y, 0);
-        
-    //     InvertionX = this.transform.position.x;
-    //     this.transform.position = new Vector3(InvertionX *= -1, this.transform.position.y, 0);
-
-    //     InvertionX = Goal.transform.position.x;
-    //     Goal.transform.position = new Vector3(InvertionX *= -1, Goal.transform.position.y, 0);
-    // }
-
     private void CreatePoint(GameObject ParentNode, GameObject CardPrefab, float X, float Y) {
         if(!isRelative) {
             X += transform.position.x;
@@ -609,6 +573,6 @@ public class GreenPlayer : MonoBehaviour {
             deckCheck = DeckCheckManagerNode.GetComponent<DeckCheckManager>();
         }
         
-        deckCheck.DeckReload('G');
+        deckCheck.photonView.RPC("DeckReload", RpcTarget.All, "G");
     }
 }
