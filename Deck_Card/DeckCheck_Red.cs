@@ -14,13 +14,11 @@ public class DeckCheck_Red : MonoBehaviourPunCallbacks {
     public GameObject ObstacleLocationNode;
     public GameObject DeckCheckManager;
     
-    public bool canInteract;
+    // public bool canInteract;
 
     void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         box2D = GetComponent<BoxCollider2D>();
-       
-        canInteract = photonView.IsMine;
     }
 
     void Update() {
@@ -39,9 +37,9 @@ public class DeckCheck_Red : MonoBehaviourPunCallbacks {
     }
 
     private void OnMouseDown() {
-        if(canInteract) {
-            DeckManager.CreateCard("R");
-        }
+        // if(canInteract)
+        DeckManager.CreateCard("R");
+        
     }
 
     void DelayFindGameObject() {

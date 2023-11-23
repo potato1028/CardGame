@@ -146,14 +146,11 @@ public class DeckCheckManager : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC]
-    void CardsParent(int newCard, int Parent) {
-        PhotonView newCardPhoton = PhotonView.Find(newCard);
-        PhotonView parentPhoton = PhotonView.Find(Parent);
+    void CardsParent(int newCard, int parent) {
+        PhotonView newCardPhotonView = PhotonView.Find(newCard);
+        PhotonView parentPhotonView = PhotonView.Find(parent);
 
-        if(newCardPhoton != null && parentPhoton != null) {
-            newCardPhoton.TransferOwnership(parentPhoton.Owner);
-            newCardPhoton.transform.SetParent(parentPhoton.transform);
-        }
+        newCardPhotonView.transform.SetParent(parentPhotonView.transform);
     }
     
     [PunRPC]

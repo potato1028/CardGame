@@ -5,7 +5,7 @@ using System;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class RedPlayer : MonoBehaviourPunCallbacks {
+public class RedPlayer : MonoBehaviourPun {
     PointButton confirm;
     DeckCheckManager deckCheck;
 

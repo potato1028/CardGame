@@ -60,9 +60,8 @@ namespace Com.MyCompany.MyGame {
         }
 
         public override void OnLeftRoom() {
-            SceneManager.LoadScene(0);
-
             DestroyPlayers();
+            SceneManager.LoadScene(0);
         }
 
         #endregion
@@ -88,7 +87,6 @@ namespace Com.MyCompany.MyGame {
 
             Destroy(player_1);
             Destroy(player_2);
-            
         }
 
     }
