@@ -13,13 +13,8 @@ namespace Com.MyCompany.MyGame {
         #region Public Variables
 
         [Tooltip("The prefab to use for representing the player")]
-        public GameObject playerOnePrefab;
-        public GameObject playerTwoPrefab;
-
         public Text debugTextR;
         public Text debugTextG;
-
-        public GameObject DeckCheckManagerPrefab;
 
         string currentSceneName;
 
@@ -36,15 +31,6 @@ namespace Com.MyCompany.MyGame {
                 Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}",PhotonNetwork.IsMasterClient);
             }
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 2) {
-                PhotonNetwork.Instantiate(this.playerOnePrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate(this.playerTwoPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                PhotonNetwork.Instantiate(this.DeckCheckManagerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            }
-            else {
-                Debug.Log("Player Not Enough");
-            }
-
         }
 
         public override void OnPlayerLeftRoom(Player other){
@@ -55,12 +41,9 @@ namespace Com.MyCompany.MyGame {
                 Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
 
             }
-
-            DestroyPlayers();
         }
 
         public override void OnLeftRoom() {
-            DestroyPlayers();
             SceneManager.LoadScene(0);
         }
 
@@ -79,15 +62,6 @@ namespace Com.MyCompany.MyGame {
         #region Private Methods
         
         #endregion
-
-
-        void DestroyPlayers() {
-            GameObject player_1 = GameObject.FindWithTag("RedDeck");
-            GameObject player_2 = GameObject.FindWithTag("GreenDeck");
-
-            Destroy(player_1);
-            Destroy(player_2);
-        }
 
     }
 }
